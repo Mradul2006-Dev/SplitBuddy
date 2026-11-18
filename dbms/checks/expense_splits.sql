@@ -1,7 +1,7 @@
 \set ON_ERROR_STOP on
 BEGIN;
 SET LOCAL search_path TO splitbuddy;
-\ir ../queries/expense_splits.sql
+\ir ../04_queries.sql
 
 INSERT INTO users (user_id, display_name, email) VALUES
     (1, 'Asha', 'asha@example.test'),

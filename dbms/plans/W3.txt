@@ -1,49 +1,49 @@
 === W3 run 1 ===
-Insert on expense_splits  (cost=16.99..17.07 rows=1 width=32) (actual time=0.206..0.211 rows=3.00 loops=1)
-  Buffers: shared hit=77
+Insert on expense_splits  (cost=16.99..17.07 rows=1 width=32) (actual time=0.199..0.204 rows=3.00 loops=1)
+  Buffers: shared hit=78
   CTE participants
-    ->  Hash Join  (cost=4.42..8.59 rows=1 width=8) (actual time=0.017..0.021 rows=3.00 loops=1)
+    ->  Hash Join  (cost=4.42..8.59 rows=1 width=8) (actual time=0.019..0.025 rows=3.00 loops=1)
           Hash Cond: (member.user_id = requested.user_id)
-          Buffers: shared hit=5
-          ->  Bitmap Heap Scan on group_members member  (cost=4.35..8.48 rows=10 width=8) (actual time=0.005..0.008 rows=10.00 loops=1)
+          Buffers: shared hit=6
+          ->  Bitmap Heap Scan on group_members member  (cost=4.35..8.48 rows=10 width=8) (actual time=0.009..0.015 rows=10.00 loops=1)
                 Recheck Cond: (group_id = '10'::bigint)
-                Heap Blocks: exact=3
-                Buffers: shared hit=5
-                ->  Bitmap Index Scan on group_members_pkey  (cost=0.00..4.35 rows=10 width=0) (actual time=0.002..0.002 rows=13.00 loops=1)
+                Heap Blocks: exact=4
+                Buffers: shared hit=6
+                ->  Bitmap Index Scan on group_members_pkey  (cost=0.00..4.35 rows=10 width=0) (actual time=0.002..0.002 rows=11.00 loops=1)
                       Index Cond: (group_id = '10'::bigint)
                       Index Searches: 1
                       Buffers: shared hit=2
-          ->  Hash  (cost=0.03..0.03 rows=3 width=8) (actual time=0.007..0.007 rows=3.00 loops=1)
+          ->  Hash  (cost=0.03..0.03 rows=3 width=8) (actual time=0.006..0.006 rows=3.00 loops=1)
                 Buckets: 1024  Batches: 1  Memory Usage: 9kB
-                ->  Function Scan on unnest requested  (cost=0.00..0.03 rows=3 width=8) (actual time=0.006..0.006 rows=3.00 loops=1)
+                ->  Function Scan on unnest requested  (cost=0.00..0.03 rows=3 width=8) (actual time=0.004..0.004 rows=3.00 loops=1)
   CTE new_expense
-    ->  Insert on expenses  (cost=8.35..8.37 rows=1 width=104) (actual time=0.141..0.141 rows=1.00 loops=1)
-          Buffers: shared hit=47
+    ->  Insert on expenses  (cost=8.35..8.37 rows=1 width=104) (actual time=0.139..0.140 rows=1.00 loops=1)
+          Buffers: shared hit=48
           InitPlan 2
-            ->  Index Only Scan using group_members_pkey on group_members  (cost=0.27..8.29 rows=1 width=0) (actual time=0.013..0.014 rows=1.00 loops=1)
+            ->  Index Only Scan using group_members_pkey on group_members  (cost=0.27..8.29 rows=1 width=0) (actual time=0.010..0.010 rows=1.00 loops=1)
                   Index Cond: ((group_id = '10'::bigint) AND (user_id = '91'::bigint))
                   Heap Fetches: 1
                   Index Searches: 1
                   Buffers: shared hit=3
           InitPlan 3
-            ->  Aggregate  (cost=0.04..0.06 rows=1 width=1) (actual time=0.033..0.033 rows=1.00 loops=1)
-                  Buffers: shared hit=8
-                  ->  Sort  (cost=0.03..0.04 rows=1 width=8) (actual time=0.030..0.030 rows=3.00 loops=1)
+            ->  Aggregate  (cost=0.04..0.06 rows=1 width=1) (actual time=0.037..0.037 rows=1.00 loops=1)
+                  Buffers: shared hit=9
+                  ->  Sort  (cost=0.03..0.04 rows=1 width=8) (actual time=0.033..0.034 rows=3.00 loops=1)
                         Sort Key: participants_1.user_id
                         Sort Method: quicksort  Memory: 25kB
-                        Buffers: shared hit=8
-                        ->  CTE Scan on participants participants_1  (cost=0.00..0.02 rows=1 width=8) (actual time=0.017..0.021 rows=3.00 loops=1)
+                        Buffers: shared hit=9
+                        ->  CTE Scan on participants participants_1  (cost=0.00..0.02 rows=1 width=8) (actual time=0.019..0.025 rows=3.00 loops=1)
                               Storage: Memory  Maximum Storage: 17kB
-                              Buffers: shared hit=5
+                              Buffers: shared hit=6
           ->  Result  (cost=0.00..0.01 rows=1 width=104) (actual time=0.068..0.068 rows=1.00 loops=1)
                 One-Time Filter: ((InitPlan 2).col1 AND (InitPlan 3).col1)
-                Buffers: shared hit=23
-  ->  Nested Loop  (cost=0.03..0.11 rows=1 width=32) (actual time=0.153..0.154 rows=3.00 loops=1)
-        Buffers: shared hit=47
-        ->  CTE Scan on new_expense  (cost=0.00..0.02 rows=1 width=16) (actual time=0.142..0.142 rows=1.00 loops=1)
+                Buffers: shared hit=24
+  ->  Nested Loop  (cost=0.03..0.11 rows=1 width=32) (actual time=0.150..0.151 rows=3.00 loops=1)
+        Buffers: shared hit=48
+        ->  CTE Scan on new_expense  (cost=0.00..0.02 rows=1 width=16) (actual time=0.140..0.140 rows=1.00 loops=1)
               Storage: Memory  Maximum Storage: 17kB
-              Buffers: shared hit=47
-        ->  WindowAgg  (cost=0.03..0.06 rows=1 width=24) (actual time=0.010..0.010 rows=3.00 loops=1)
+              Buffers: shared hit=48
+        ->  WindowAgg  (cost=0.03..0.06 rows=1 width=24) (actual time=0.009..0.009 rows=3.00 loops=1)
               Window: w2 AS ()
               Storage: Memory  Maximum Storage: 17kB
               ->  WindowAgg  (cost=0.03..0.05 rows=1 width=16) (actual time=0.005..0.006 rows=3.00 loops=1)
@@ -55,124 +55,61 @@ Insert on expense_splits  (cost=16.99..17.07 rows=1 width=32) (actual time=0.206
                           ->  CTE Scan on participants  (cost=0.00..0.02 rows=1 width=8) (actual time=0.000..0.000 rows=3.00 loops=1)
                                 Storage: Memory  Maximum Storage: 17kB
 Planning:
-  Buffers: shared hit=98
-Planning Time: 0.321 ms
-Trigger for constraint expenses_group_id_paid_by_fkey on expenses: time=0.061 calls=1
-Trigger for constraint expense_splits_group_id_expense_no_fkey on expense_splits: time=0.064 calls=3
-Trigger for constraint expense_splits_group_id_user_id_fkey on expense_splits: time=0.033 calls=3
-Execution Time: 0.418 ms
+  Buffers: shared hit=84
+Planning Time: 0.302 ms
+Trigger for constraint expenses_group_id_paid_by_fkey on expenses: time=0.058 calls=1
+Trigger for constraint expense_splits_group_id_expense_no_fkey on expense_splits: time=0.062 calls=3
+Trigger for constraint expense_splits_group_id_user_id_fkey on expense_splits: time=0.032 calls=3
+Execution Time: 0.405 ms
 === W3 run 2 ===
-Insert on expense_splits  (cost=16.99..17.07 rows=1 width=32) (actual time=0.205..0.209 rows=3.00 loops=1)
-  Buffers: shared hit=77
+Insert on expense_splits  (cost=16.99..17.07 rows=1 width=32) (actual time=0.189..0.194 rows=3.00 loops=1)
+  Buffers: shared hit=78
   CTE participants
     ->  Hash Join  (cost=4.42..8.59 rows=1 width=8) (actual time=0.015..0.020 rows=3.00 loops=1)
           Hash Cond: (member.user_id = requested.user_id)
-          Buffers: shared hit=5
-          ->  Bitmap Heap Scan on group_members member  (cost=4.35..8.48 rows=10 width=8) (actual time=0.005..0.008 rows=10.00 loops=1)
+          Buffers: shared hit=6
+          ->  Bitmap Heap Scan on group_members member  (cost=4.35..8.48 rows=10 width=8) (actual time=0.005..0.009 rows=10.00 loops=1)
                 Recheck Cond: (group_id = '10'::bigint)
-                Heap Blocks: exact=3
-                Buffers: shared hit=5
-                ->  Bitmap Index Scan on group_members_pkey  (cost=0.00..4.35 rows=10 width=0) (actual time=0.002..0.002 rows=13.00 loops=1)
+                Heap Blocks: exact=4
+                Buffers: shared hit=6
+                ->  Bitmap Index Scan on group_members_pkey  (cost=0.00..4.35 rows=10 width=0) (actual time=0.002..0.002 rows=11.00 loops=1)
                       Index Cond: (group_id = '10'::bigint)
                       Index Searches: 1
                       Buffers: shared hit=2
-          ->  Hash  (cost=0.03..0.03 rows=3 width=8) (actual time=0.007..0.007 rows=3.00 loops=1)
+          ->  Hash  (cost=0.03..0.03 rows=3 width=8) (actual time=0.006..0.006 rows=3.00 loops=1)
                 Buckets: 1024  Batches: 1  Memory Usage: 9kB
-                ->  Function Scan on unnest requested  (cost=0.00..0.03 rows=3 width=8) (actual time=0.005..0.005 rows=3.00 loops=1)
+                ->  Function Scan on unnest requested  (cost=0.00..0.03 rows=3 width=8) (actual time=0.004..0.004 rows=3.00 loops=1)
   CTE new_expense
-    ->  Insert on expenses  (cost=8.35..8.37 rows=1 width=104) (actual time=0.139..0.139 rows=1.00 loops=1)
-          Buffers: shared hit=47
+    ->  Insert on expenses  (cost=8.35..8.37 rows=1 width=104) (actual time=0.128..0.129 rows=1.00 loops=1)
+          Buffers: shared hit=48
           InitPlan 2
-            ->  Index Only Scan using group_members_pkey on group_members  (cost=0.27..8.29 rows=1 width=0) (actual time=0.011..0.011 rows=1.00 loops=1)
+            ->  Index Only Scan using group_members_pkey on group_members  (cost=0.27..8.29 rows=1 width=0) (actual time=0.010..0.010 rows=1.00 loops=1)
                   Index Cond: ((group_id = '10'::bigint) AND (user_id = '91'::bigint))
                   Heap Fetches: 1
                   Index Searches: 1
                   Buffers: shared hit=3
           InitPlan 3
             ->  Aggregate  (cost=0.04..0.06 rows=1 width=1) (actual time=0.032..0.032 rows=1.00 loops=1)
-                  Buffers: shared hit=8
-                  ->  Sort  (cost=0.03..0.04 rows=1 width=8) (actual time=0.029..0.029 rows=3.00 loops=1)
-                        Sort Key: participants_1.user_id
-                        Sort Method: quicksort  Memory: 25kB
-                        Buffers: shared hit=8
-                        ->  CTE Scan on participants participants_1  (cost=0.00..0.02 rows=1 width=8) (actual time=0.016..0.020 rows=3.00 loops=1)
-                              Storage: Memory  Maximum Storage: 17kB
-                              Buffers: shared hit=5
-          ->  Result  (cost=0.00..0.01 rows=1 width=104) (actual time=0.060..0.060 rows=1.00 loops=1)
-                One-Time Filter: ((InitPlan 2).col1 AND (InitPlan 3).col1)
-                Buffers: shared hit=23
-  ->  Nested Loop  (cost=0.03..0.11 rows=1 width=32) (actual time=0.151..0.152 rows=3.00 loops=1)
-        Buffers: shared hit=47
-        ->  CTE Scan on new_expense  (cost=0.00..0.02 rows=1 width=16) (actual time=0.140..0.140 rows=1.00 loops=1)
-              Storage: Memory  Maximum Storage: 17kB
-              Buffers: shared hit=47
-        ->  WindowAgg  (cost=0.03..0.06 rows=1 width=24) (actual time=0.009..0.010 rows=3.00 loops=1)
-              Window: w2 AS ()
-              Storage: Memory  Maximum Storage: 17kB
-              ->  WindowAgg  (cost=0.03..0.05 rows=1 width=16) (actual time=0.006..0.006 rows=3.00 loops=1)
-                    Window: w1 AS (ORDER BY participants.user_id ROWS UNBOUNDED PRECEDING)
-                    Storage: Memory  Maximum Storage: 17kB
-                    ->  Sort  (cost=0.03..0.04 rows=1 width=8) (actual time=0.003..0.003 rows=3.00 loops=1)
-                          Sort Key: participants.user_id
-                          Sort Method: quicksort  Memory: 25kB
-                          ->  CTE Scan on participants  (cost=0.00..0.02 rows=1 width=8) (actual time=0.000..0.000 rows=3.00 loops=1)
-                                Storage: Memory  Maximum Storage: 17kB
-Planning:
-  Buffers: shared hit=98
-Planning Time: 0.295 ms
-Trigger for constraint expenses_group_id_paid_by_fkey on expenses: time=0.060 calls=1
-Trigger for constraint expense_splits_group_id_expense_no_fkey on expense_splits: time=0.062 calls=3
-Trigger for constraint expense_splits_group_id_user_id_fkey on expense_splits: time=0.032 calls=3
-Execution Time: 0.453 ms
-=== W3 run 3 ===
-Insert on expense_splits  (cost=16.99..17.07 rows=1 width=32) (actual time=0.193..0.197 rows=3.00 loops=1)
-  Buffers: shared hit=77
-  CTE participants
-    ->  Hash Join  (cost=4.42..8.59 rows=1 width=8) (actual time=0.016..0.020 rows=3.00 loops=1)
-          Hash Cond: (member.user_id = requested.user_id)
-          Buffers: shared hit=5
-          ->  Bitmap Heap Scan on group_members member  (cost=4.35..8.48 rows=10 width=8) (actual time=0.005..0.008 rows=10.00 loops=1)
-                Recheck Cond: (group_id = '10'::bigint)
-                Heap Blocks: exact=3
-                Buffers: shared hit=5
-                ->  Bitmap Index Scan on group_members_pkey  (cost=0.00..4.35 rows=10 width=0) (actual time=0.002..0.002 rows=13.00 loops=1)
-                      Index Cond: (group_id = '10'::bigint)
-                      Index Searches: 1
-                      Buffers: shared hit=2
-          ->  Hash  (cost=0.03..0.03 rows=3 width=8) (actual time=0.007..0.007 rows=3.00 loops=1)
-                Buckets: 1024  Batches: 1  Memory Usage: 9kB
-                ->  Function Scan on unnest requested  (cost=0.00..0.03 rows=3 width=8) (actual time=0.005..0.005 rows=3.00 loops=1)
-  CTE new_expense
-    ->  Insert on expenses  (cost=8.35..8.37 rows=1 width=104) (actual time=0.129..0.130 rows=1.00 loops=1)
-          Buffers: shared hit=47
-          InitPlan 2
-            ->  Index Only Scan using group_members_pkey on group_members  (cost=0.27..8.29 rows=1 width=0) (actual time=0.009..0.009 rows=1.00 loops=1)
-                  Index Cond: ((group_id = '10'::bigint) AND (user_id = '91'::bigint))
-                  Heap Fetches: 1
-                  Index Searches: 1
-                  Buffers: shared hit=3
-          InitPlan 3
-            ->  Aggregate  (cost=0.04..0.06 rows=1 width=1) (actual time=0.031..0.031 rows=1.00 loops=1)
-                  Buffers: shared hit=8
+                  Buffers: shared hit=9
                   ->  Sort  (cost=0.03..0.04 rows=1 width=8) (actual time=0.028..0.028 rows=3.00 loops=1)
                         Sort Key: participants_1.user_id
                         Sort Method: quicksort  Memory: 25kB
-                        Buffers: shared hit=8
-                        ->  CTE Scan on participants participants_1  (cost=0.00..0.02 rows=1 width=8) (actual time=0.016..0.020 rows=3.00 loops=1)
+                        Buffers: shared hit=9
+                        ->  CTE Scan on participants participants_1  (cost=0.00..0.02 rows=1 width=8) (actual time=0.015..0.020 rows=3.00 loops=1)
                               Storage: Memory  Maximum Storage: 17kB
-                              Buffers: shared hit=5
-          ->  Result  (cost=0.00..0.01 rows=1 width=104) (actual time=0.056..0.056 rows=1.00 loops=1)
+                              Buffers: shared hit=6
+          ->  Result  (cost=0.00..0.01 rows=1 width=104) (actual time=0.058..0.058 rows=1.00 loops=1)
                 One-Time Filter: ((InitPlan 2).col1 AND (InitPlan 3).col1)
-                Buffers: shared hit=23
-  ->  Nested Loop  (cost=0.03..0.11 rows=1 width=32) (actual time=0.140..0.141 rows=3.00 loops=1)
-        Buffers: shared hit=47
-        ->  CTE Scan on new_expense  (cost=0.00..0.02 rows=1 width=16) (actual time=0.130..0.130 rows=1.00 loops=1)
+                Buffers: shared hit=24
+  ->  Nested Loop  (cost=0.03..0.11 rows=1 width=32) (actual time=0.139..0.140 rows=3.00 loops=1)
+        Buffers: shared hit=48
+        ->  CTE Scan on new_expense  (cost=0.00..0.02 rows=1 width=16) (actual time=0.129..0.129 rows=1.00 loops=1)
               Storage: Memory  Maximum Storage: 17kB
-              Buffers: shared hit=47
+              Buffers: shared hit=48
         ->  WindowAgg  (cost=0.03..0.06 rows=1 width=24) (actual time=0.008..0.009 rows=3.00 loops=1)
               Window: w2 AS ()
               Storage: Memory  Maximum Storage: 17kB
-              ->  WindowAgg  (cost=0.03..0.05 rows=1 width=16) (actual time=0.005..0.006 rows=3.00 loops=1)
+              ->  WindowAgg  (cost=0.03..0.05 rows=1 width=16) (actual time=0.005..0.005 rows=3.00 loops=1)
                     Window: w1 AS (ORDER BY participants.user_id ROWS UNBOUNDED PRECEDING)
                     Storage: Memory  Maximum Storage: 17kB
                     ->  Sort  (cost=0.03..0.04 rows=1 width=8) (actual time=0.002..0.003 rows=3.00 loops=1)
@@ -181,9 +118,72 @@ Insert on expense_splits  (cost=16.99..17.07 rows=1 width=32) (actual time=0.193
                           ->  CTE Scan on participants  (cost=0.00..0.02 rows=1 width=8) (actual time=0.000..0.000 rows=3.00 loops=1)
                                 Storage: Memory  Maximum Storage: 17kB
 Planning:
-  Buffers: shared hit=98
-Planning Time: 0.294 ms
-Trigger for constraint expenses_group_id_paid_by_fkey on expenses: time=0.066 calls=1
-Trigger for constraint expense_splits_group_id_expense_no_fkey on expense_splits: time=0.062 calls=3
-Trigger for constraint expense_splits_group_id_user_id_fkey on expense_splits: time=0.035 calls=3
-Execution Time: 0.408 ms
+  Buffers: shared hit=84
+Planning Time: 0.279 ms
+Trigger for constraint expenses_group_id_paid_by_fkey on expenses: time=0.054 calls=1
+Trigger for constraint expense_splits_group_id_expense_no_fkey on expense_splits: time=0.058 calls=3
+Trigger for constraint expense_splits_group_id_user_id_fkey on expense_splits: time=0.031 calls=3
+Execution Time: 0.382 ms
+=== W3 run 3 ===
+Insert on expense_splits  (cost=16.99..17.07 rows=1 width=32) (actual time=0.222..0.226 rows=3.00 loops=1)
+  Buffers: shared hit=78
+  CTE participants
+    ->  Hash Join  (cost=4.42..8.59 rows=1 width=8) (actual time=0.017..0.022 rows=3.00 loops=1)
+          Hash Cond: (member.user_id = requested.user_id)
+          Buffers: shared hit=6
+          ->  Bitmap Heap Scan on group_members member  (cost=4.35..8.48 rows=10 width=8) (actual time=0.006..0.011 rows=10.00 loops=1)
+                Recheck Cond: (group_id = '10'::bigint)
+                Heap Blocks: exact=4
+                Buffers: shared hit=6
+                ->  Bitmap Index Scan on group_members_pkey  (cost=0.00..4.35 rows=10 width=0) (actual time=0.002..0.002 rows=11.00 loops=1)
+                      Index Cond: (group_id = '10'::bigint)
+                      Index Searches: 1
+                      Buffers: shared hit=2
+          ->  Hash  (cost=0.03..0.03 rows=3 width=8) (actual time=0.006..0.006 rows=3.00 loops=1)
+                Buckets: 1024  Batches: 1  Memory Usage: 9kB
+                ->  Function Scan on unnest requested  (cost=0.00..0.03 rows=3 width=8) (actual time=0.004..0.005 rows=3.00 loops=1)
+  CTE new_expense
+    ->  Insert on expenses  (cost=8.35..8.37 rows=1 width=104) (actual time=0.153..0.154 rows=1.00 loops=1)
+          Buffers: shared hit=48
+          InitPlan 2
+            ->  Index Only Scan using group_members_pkey on group_members  (cost=0.27..8.29 rows=1 width=0) (actual time=0.016..0.016 rows=1.00 loops=1)
+                  Index Cond: ((group_id = '10'::bigint) AND (user_id = '91'::bigint))
+                  Heap Fetches: 1
+                  Index Searches: 1
+                  Buffers: shared hit=3
+          InitPlan 3
+            ->  Aggregate  (cost=0.04..0.06 rows=1 width=1) (actual time=0.035..0.035 rows=1.00 loops=1)
+                  Buffers: shared hit=9
+                  ->  Sort  (cost=0.03..0.04 rows=1 width=8) (actual time=0.031..0.031 rows=3.00 loops=1)
+                        Sort Key: participants_1.user_id
+                        Sort Method: quicksort  Memory: 25kB
+                        Buffers: shared hit=9
+                        ->  CTE Scan on participants participants_1  (cost=0.00..0.02 rows=1 width=8) (actual time=0.017..0.022 rows=3.00 loops=1)
+                              Storage: Memory  Maximum Storage: 17kB
+                              Buffers: shared hit=6
+          ->  Result  (cost=0.00..0.01 rows=1 width=104) (actual time=0.068..0.068 rows=1.00 loops=1)
+                One-Time Filter: ((InitPlan 2).col1 AND (InitPlan 3).col1)
+                Buffers: shared hit=24
+  ->  Nested Loop  (cost=0.03..0.11 rows=1 width=32) (actual time=0.166..0.168 rows=3.00 loops=1)
+        Buffers: shared hit=48
+        ->  CTE Scan on new_expense  (cost=0.00..0.02 rows=1 width=16) (actual time=0.154..0.155 rows=1.00 loops=1)
+              Storage: Memory  Maximum Storage: 17kB
+              Buffers: shared hit=48
+        ->  WindowAgg  (cost=0.03..0.06 rows=1 width=24) (actual time=0.010..0.011 rows=3.00 loops=1)
+              Window: w2 AS ()
+              Storage: Memory  Maximum Storage: 17kB
+              ->  WindowAgg  (cost=0.03..0.05 rows=1 width=16) (actual time=0.006..0.007 rows=3.00 loops=1)
+                    Window: w1 AS (ORDER BY participants.user_id ROWS UNBOUNDED PRECEDING)
+                    Storage: Memory  Maximum Storage: 17kB
+                    ->  Sort  (cost=0.03..0.04 rows=1 width=8) (actual time=0.003..0.003 rows=3.00 loops=1)
+                          Sort Key: participants.user_id
+                          Sort Method: quicksort  Memory: 25kB
+                          ->  CTE Scan on participants  (cost=0.00..0.02 rows=1 width=8) (actual time=0.000..0.000 rows=3.00 loops=1)
+                                Storage: Memory  Maximum Storage: 17kB
+Planning:
+  Buffers: shared hit=84
+Planning Time: 0.994 ms
+Trigger for constraint expenses_group_id_paid_by_fkey on expenses: time=0.064 calls=1
+Trigger for constraint expense_splits_group_id_expense_no_fkey on expense_splits: time=0.068 calls=3
+Trigger for constraint expense_splits_group_id_user_id_fkey on expense_splits: time=0.088 calls=3
+Execution Time: 0.501 ms

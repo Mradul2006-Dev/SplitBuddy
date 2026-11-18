@@ -1,0 +1,264 @@
+=== R4 run 1 ===
+Sort  (cost=273.63..273.65 rows=10 width=53) (actual time=0.389..0.391 rows=10.00 loops=1)
+  Sort Key: u.display_name, u.user_id
+  Sort Method: quicksort  Memory: 25kB
+  Buffers: shared hit=256
+  CTE allowed_group
+    ->  Index Only Scan using group_members_pkey on group_members  (cost=0.27..8.29 rows=1 width=8) (actual time=0.008..0.009 rows=1.00 loops=1)
+          Index Cond: ((group_id = '10'::bigint) AND (user_id = '91'::bigint))
+          Heap Fetches: 1
+          Index Searches: 1
+          Buffers: shared hit=3
+  ->  Hash Right Join  (cost=259.88..265.17 rows=10 width=53) (actual time=0.371..0.377 rows=10.00 loops=1)
+        Hash Cond: (e.paid_by = u.user_id)
+        Buffers: shared hit=250
+        ->  HashAggregate  (cost=247.54..250.04 rows=200 width=40) (actual time=0.340..0.342 rows=4.00 loops=1)
+              Group Key: e.paid_by
+              Batches: 1  Memory Usage: 32kB
+              Buffers: shared hit=212
+              ->  Append  (cost=5.06..245.03 rows=502 width=16) (actual time=0.012..0.311 rows=502.00 loops=1)
+                    Buffers: shared hit=212
+                    ->  Nested Loop  (cost=5.06..65.65 rows=100 width=16) (actual time=0.012..0.081 rows=100.00 loops=1)
+                          Buffers: shared hit=59
+                          ->  CTE Scan on allowed_group allowed_group_1  (cost=0.00..0.02 rows=1 width=8) (actual time=0.000..0.000 rows=1.00 loops=1)
+                                Storage: Memory  Maximum Storage: 17kB
+                          ->  Bitmap Heap Scan on expenses e  (cost=5.06..64.63 rows=100 width=24) (actual time=0.012..0.074 rows=100.00 loops=1)
+                                Recheck Cond: (group_id = allowed_group_1.group_id)
+                                Heap Blocks: exact=57
+                                Buffers: shared hit=59
+                                ->  Bitmap Index Scan on expenses_pkey  (cost=0.00..5.03 rows=100 width=0) (actual time=0.006..0.006 rows=100.00 loops=1)
+                                      Index Cond: (group_id = allowed_group_1.group_id)
+                                      Index Searches: 1
+                                      Buffers: shared hit=2
+                    ->  Nested Loop  (cost=15.39..173.41 rows=400 width=16) (actual time=0.031..0.196 rows=400.00 loops=1)
+                          Buffers: shared hit=151
+                          ->  CTE Scan on allowed_group allowed_group_2  (cost=0.00..0.02 rows=1 width=8) (actual time=0.000..0.000 rows=1.00 loops=1)
+                                Storage: Memory  Maximum Storage: 17kB
+                          ->  Bitmap Heap Scan on expense_splits s  (cost=15.39..168.39 rows=400 width=24) (actual time=0.030..0.176 rows=400.00 loops=1)
+                                Recheck Cond: (group_id = allowed_group_2.group_id)
+                                Heap Blocks: exact=147
+                                Buffers: shared hit=151
+                                ->  Bitmap Index Scan on expense_splits_pkey  (cost=0.00..15.29 rows=400 width=0) (actual time=0.022..0.022 rows=400.00 loops=1)
+                                      Index Cond: (group_id = allowed_group_2.group_id)
+                                      Index Searches: 1
+                                      Buffers: shared hit=4
+                    ->  Hash Join  (cost=0.03..1.73 rows=1 width=16) (actual time=0.008..0.010 rows=1.00 loops=1)
+                          Hash Cond: (s_1.group_id = allowed_group_3.group_id)
+                          Buffers: shared hit=1
+                          ->  Seq Scan on settlements s_1  (cost=0.00..1.50 rows=50 width=24) (actual time=0.002..0.003 rows=50.00 loops=1)
+                                Buffers: shared hit=1
+                          ->  Hash  (cost=0.02..0.02 rows=1 width=8) (actual time=0.001..0.001 rows=1.00 loops=1)
+                                Buckets: 1024  Batches: 1  Memory Usage: 9kB
+                                ->  CTE Scan on allowed_group allowed_group_3  (cost=0.00..0.02 rows=1 width=8) (actual time=0.000..0.000 rows=1.00 loops=1)
+                                      Storage: Memory  Maximum Storage: 17kB
+                    ->  Hash Join  (cost=0.03..1.73 rows=1 width=16) (actual time=0.005..0.007 rows=1.00 loops=1)
+                          Hash Cond: (s_2.group_id = allowed_group_4.group_id)
+                          Buffers: shared hit=1
+                          ->  Seq Scan on settlements s_2  (cost=0.00..1.50 rows=50 width=24) (actual time=0.001..0.002 rows=50.00 loops=1)
+                                Buffers: shared hit=1
+                          ->  Hash  (cost=0.02..0.02 rows=1 width=8) (actual time=0.001..0.001 rows=1.00 loops=1)
+                                Buckets: 1024  Batches: 1  Memory Usage: 9kB
+                                ->  CTE Scan on allowed_group allowed_group_4  (cost=0.00..0.02 rows=1 width=8) (actual time=0.000..0.000 rows=1.00 loops=1)
+                                      Storage: Memory  Maximum Storage: 17kB
+        ->  Hash  (cost=12.22..12.22 rows=10 width=21) (actual time=0.028..0.029 rows=10.00 loops=1)
+              Buckets: 1024  Batches: 1  Memory Usage: 9kB
+              Buffers: shared hit=38
+              ->  Nested Loop  (cost=4.62..12.22 rows=10 width=21) (actual time=0.018..0.026 rows=10.00 loops=1)
+                    Buffers: shared hit=38
+                    ->  Nested Loop  (cost=4.35..8.60 rows=10 width=8) (actual time=0.015..0.019 rows=10.00 loops=1)
+                          Buffers: shared hit=8
+                          ->  CTE Scan on allowed_group  (cost=0.00..0.02 rows=1 width=8) (actual time=0.009..0.010 rows=1.00 loops=1)
+                                Storage: Memory  Maximum Storage: 17kB
+                                Buffers: shared hit=3
+                          ->  Bitmap Heap Scan on group_members m  (cost=4.35..8.48 rows=10 width=16) (actual time=0.005..0.008 rows=10.00 loops=1)
+                                Recheck Cond: (group_id = allowed_group.group_id)
+                                Heap Blocks: exact=3
+                                Buffers: shared hit=5
+                                ->  Bitmap Index Scan on group_members_pkey  (cost=0.00..4.35 rows=10 width=0) (actual time=0.002..0.002 rows=10.00 loops=1)
+                                      Index Cond: (group_id = allowed_group.group_id)
+                                      Index Searches: 1
+                                      Buffers: shared hit=2
+                    ->  Index Scan using users_pkey on users u  (cost=0.27..0.36 rows=1 width=21) (actual time=0.001..0.001 rows=1.00 loops=10)
+                          Index Cond: (user_id = m.user_id)
+                          Index Searches: 10
+                          Buffers: shared hit=30
+Planning:
+  Buffers: shared hit=247
+Planning Time: 0.654 ms
+Execution Time: 0.445 ms
+=== R4 run 2 ===
+Sort  (cost=273.63..273.65 rows=10 width=53) (actual time=0.442..0.444 rows=10.00 loops=1)
+  Sort Key: u.display_name, u.user_id
+  Sort Method: quicksort  Memory: 25kB
+  Buffers: shared hit=256
+  CTE allowed_group
+    ->  Index Only Scan using group_members_pkey on group_members  (cost=0.27..8.29 rows=1 width=8) (actual time=0.009..0.010 rows=1.00 loops=1)
+          Index Cond: ((group_id = '10'::bigint) AND (user_id = '91'::bigint))
+          Heap Fetches: 1
+          Index Searches: 1
+          Buffers: shared hit=3
+  ->  Hash Right Join  (cost=259.88..265.17 rows=10 width=53) (actual time=0.424..0.429 rows=10.00 loops=1)
+        Hash Cond: (e.paid_by = u.user_id)
+        Buffers: shared hit=250
+        ->  HashAggregate  (cost=247.54..250.04 rows=200 width=40) (actual time=0.388..0.390 rows=4.00 loops=1)
+              Group Key: e.paid_by
+              Batches: 1  Memory Usage: 32kB
+              Buffers: shared hit=212
+              ->  Append  (cost=5.06..245.03 rows=502 width=16) (actual time=0.015..0.358 rows=502.00 loops=1)
+                    Buffers: shared hit=212
+                    ->  Nested Loop  (cost=5.06..65.65 rows=100 width=16) (actual time=0.015..0.094 rows=100.00 loops=1)
+                          Buffers: shared hit=59
+                          ->  CTE Scan on allowed_group allowed_group_1  (cost=0.00..0.02 rows=1 width=8) (actual time=0.000..0.000 rows=1.00 loops=1)
+                                Storage: Memory  Maximum Storage: 17kB
+                          ->  Bitmap Heap Scan on expenses e  (cost=5.06..64.63 rows=100 width=24) (actual time=0.014..0.086 rows=100.00 loops=1)
+                                Recheck Cond: (group_id = allowed_group_1.group_id)
+                                Heap Blocks: exact=57
+                                Buffers: shared hit=59
+                                ->  Bitmap Index Scan on expenses_pkey  (cost=0.00..5.03 rows=100 width=0) (actual time=0.008..0.008 rows=100.00 loops=1)
+                                      Index Cond: (group_id = allowed_group_1.group_id)
+                                      Index Searches: 1
+                                      Buffers: shared hit=2
+                    ->  Nested Loop  (cost=15.39..173.41 rows=400 width=16) (actual time=0.031..0.224 rows=400.00 loops=1)
+                          Buffers: shared hit=151
+                          ->  CTE Scan on allowed_group allowed_group_2  (cost=0.00..0.02 rows=1 width=8) (actual time=0.000..0.000 rows=1.00 loops=1)
+                                Storage: Memory  Maximum Storage: 17kB
+                          ->  Bitmap Heap Scan on expense_splits s  (cost=15.39..168.39 rows=400 width=24) (actual time=0.030..0.198 rows=400.00 loops=1)
+                                Recheck Cond: (group_id = allowed_group_2.group_id)
+                                Heap Blocks: exact=147
+                                Buffers: shared hit=151
+                                ->  Bitmap Index Scan on expense_splits_pkey  (cost=0.00..15.29 rows=400 width=0) (actual time=0.020..0.020 rows=400.00 loops=1)
+                                      Index Cond: (group_id = allowed_group_2.group_id)
+                                      Index Searches: 1
+                                      Buffers: shared hit=4
+                    ->  Hash Join  (cost=0.03..1.73 rows=1 width=16) (actual time=0.011..0.013 rows=1.00 loops=1)
+                          Hash Cond: (s_1.group_id = allowed_group_3.group_id)
+                          Buffers: shared hit=1
+                          ->  Seq Scan on settlements s_1  (cost=0.00..1.50 rows=50 width=24) (actual time=0.003..0.004 rows=50.00 loops=1)
+                                Buffers: shared hit=1
+                          ->  Hash  (cost=0.02..0.02 rows=1 width=8) (actual time=0.002..0.002 rows=1.00 loops=1)
+                                Buckets: 1024  Batches: 1  Memory Usage: 9kB
+                                ->  CTE Scan on allowed_group allowed_group_3  (cost=0.00..0.02 rows=1 width=8) (actual time=0.000..0.000 rows=1.00 loops=1)
+                                      Storage: Memory  Maximum Storage: 17kB
+                    ->  Hash Join  (cost=0.03..1.73 rows=1 width=16) (actual time=0.007..0.009 rows=1.00 loops=1)
+                          Hash Cond: (s_2.group_id = allowed_group_4.group_id)
+                          Buffers: shared hit=1
+                          ->  Seq Scan on settlements s_2  (cost=0.00..1.50 rows=50 width=24) (actual time=0.001..0.002 rows=50.00 loops=1)
+                                Buffers: shared hit=1
+                          ->  Hash  (cost=0.02..0.02 rows=1 width=8) (actual time=0.002..0.002 rows=1.00 loops=1)
+                                Buckets: 1024  Batches: 1  Memory Usage: 9kB
+                                ->  CTE Scan on allowed_group allowed_group_4  (cost=0.00..0.02 rows=1 width=8) (actual time=0.000..0.000 rows=1.00 loops=1)
+                                      Storage: Memory  Maximum Storage: 17kB
+        ->  Hash  (cost=12.22..12.22 rows=10 width=21) (actual time=0.032..0.032 rows=10.00 loops=1)
+              Buckets: 1024  Batches: 1  Memory Usage: 9kB
+              Buffers: shared hit=38
+              ->  Nested Loop  (cost=4.62..12.22 rows=10 width=21) (actual time=0.021..0.030 rows=10.00 loops=1)
+                    Buffers: shared hit=38
+                    ->  Nested Loop  (cost=4.35..8.60 rows=10 width=8) (actual time=0.017..0.022 rows=10.00 loops=1)
+                          Buffers: shared hit=8
+                          ->  CTE Scan on allowed_group  (cost=0.00..0.02 rows=1 width=8) (actual time=0.010..0.011 rows=1.00 loops=1)
+                                Storage: Memory  Maximum Storage: 17kB
+                                Buffers: shared hit=3
+                          ->  Bitmap Heap Scan on group_members m  (cost=4.35..8.48 rows=10 width=16) (actual time=0.006..0.010 rows=10.00 loops=1)
+                                Recheck Cond: (group_id = allowed_group.group_id)
+                                Heap Blocks: exact=3
+                                Buffers: shared hit=5
+                                ->  Bitmap Index Scan on group_members_pkey  (cost=0.00..4.35 rows=10 width=0) (actual time=0.002..0.002 rows=10.00 loops=1)
+                                      Index Cond: (group_id = allowed_group.group_id)
+                                      Index Searches: 1
+                                      Buffers: shared hit=2
+                    ->  Index Scan using users_pkey on users u  (cost=0.27..0.36 rows=1 width=21) (actual time=0.001..0.001 rows=1.00 loops=10)
+                          Index Cond: (user_id = m.user_id)
+                          Index Searches: 10
+                          Buffers: shared hit=30
+Planning:
+  Buffers: shared hit=247
+Planning Time: 0.705 ms
+Execution Time: 0.502 ms
+=== R4 run 3 ===
+Sort  (cost=273.63..273.65 rows=10 width=53) (actual time=0.382..0.384 rows=10.00 loops=1)
+  Sort Key: u.display_name, u.user_id
+  Sort Method: quicksort  Memory: 25kB
+  Buffers: shared hit=256
+  CTE allowed_group
+    ->  Index Only Scan using group_members_pkey on group_members  (cost=0.27..8.29 rows=1 width=8) (actual time=0.008..0.008 rows=1.00 loops=1)
+          Index Cond: ((group_id = '10'::bigint) AND (user_id = '91'::bigint))
+          Heap Fetches: 1
+          Index Searches: 1
+          Buffers: shared hit=3
+  ->  Hash Right Join  (cost=259.88..265.17 rows=10 width=53) (actual time=0.366..0.370 rows=10.00 loops=1)
+        Hash Cond: (e.paid_by = u.user_id)
+        Buffers: shared hit=250
+        ->  HashAggregate  (cost=247.54..250.04 rows=200 width=40) (actual time=0.335..0.336 rows=4.00 loops=1)
+              Group Key: e.paid_by
+              Batches: 1  Memory Usage: 32kB
+              Buffers: shared hit=212
+              ->  Append  (cost=5.06..245.03 rows=502 width=16) (actual time=0.014..0.305 rows=502.00 loops=1)
+                    Buffers: shared hit=212
+                    ->  Nested Loop  (cost=5.06..65.65 rows=100 width=16) (actual time=0.014..0.084 rows=100.00 loops=1)
+                          Buffers: shared hit=59
+                          ->  CTE Scan on allowed_group allowed_group_1  (cost=0.00..0.02 rows=1 width=8) (actual time=0.000..0.000 rows=1.00 loops=1)
+                                Storage: Memory  Maximum Storage: 17kB
+                          ->  Bitmap Heap Scan on expenses e  (cost=5.06..64.63 rows=100 width=24) (actual time=0.013..0.078 rows=100.00 loops=1)
+                                Recheck Cond: (group_id = allowed_group_1.group_id)
+                                Heap Blocks: exact=57
+                                Buffers: shared hit=59
+                                ->  Bitmap Index Scan on expenses_pkey  (cost=0.00..5.03 rows=100 width=0) (actual time=0.007..0.007 rows=100.00 loops=1)
+                                      Index Cond: (group_id = allowed_group_1.group_id)
+                                      Index Searches: 1
+                                      Buffers: shared hit=2
+                    ->  Nested Loop  (cost=15.39..173.41 rows=400 width=16) (actual time=0.027..0.186 rows=400.00 loops=1)
+                          Buffers: shared hit=151
+                          ->  CTE Scan on allowed_group allowed_group_2  (cost=0.00..0.02 rows=1 width=8) (actual time=0.000..0.000 rows=1.00 loops=1)
+                                Storage: Memory  Maximum Storage: 17kB
+                          ->  Bitmap Heap Scan on expense_splits s  (cost=15.39..168.39 rows=400 width=24) (actual time=0.026..0.168 rows=400.00 loops=1)
+                                Recheck Cond: (group_id = allowed_group_2.group_id)
+                                Heap Blocks: exact=147
+                                Buffers: shared hit=151
+                                ->  Bitmap Index Scan on expense_splits_pkey  (cost=0.00..15.29 rows=400 width=0) (actual time=0.017..0.017 rows=400.00 loops=1)
+                                      Index Cond: (group_id = allowed_group_2.group_id)
+                                      Index Searches: 1
+                                      Buffers: shared hit=4
+                    ->  Hash Join  (cost=0.03..1.73 rows=1 width=16) (actual time=0.008..0.010 rows=1.00 loops=1)
+                          Hash Cond: (s_1.group_id = allowed_group_3.group_id)
+                          Buffers: shared hit=1
+                          ->  Seq Scan on settlements s_1  (cost=0.00..1.50 rows=50 width=24) (actual time=0.002..0.004 rows=50.00 loops=1)
+                                Buffers: shared hit=1
+                          ->  Hash  (cost=0.02..0.02 rows=1 width=8) (actual time=0.001..0.001 rows=1.00 loops=1)
+                                Buckets: 1024  Batches: 1  Memory Usage: 9kB
+                                ->  CTE Scan on allowed_group allowed_group_3  (cost=0.00..0.02 rows=1 width=8) (actual time=0.000..0.000 rows=1.00 loops=1)
+                                      Storage: Memory  Maximum Storage: 17kB
+                    ->  Hash Join  (cost=0.03..1.73 rows=1 width=16) (actual time=0.005..0.007 rows=1.00 loops=1)
+                          Hash Cond: (s_2.group_id = allowed_group_4.group_id)
+                          Buffers: shared hit=1
+                          ->  Seq Scan on settlements s_2  (cost=0.00..1.50 rows=50 width=24) (actual time=0.001..0.002 rows=50.00 loops=1)
+                                Buffers: shared hit=1
+                          ->  Hash  (cost=0.02..0.02 rows=1 width=8) (actual time=0.001..0.001 rows=1.00 loops=1)
+                                Buckets: 1024  Batches: 1  Memory Usage: 9kB
+                                ->  CTE Scan on allowed_group allowed_group_4  (cost=0.00..0.02 rows=1 width=8) (actual time=0.000..0.000 rows=1.00 loops=1)
+                                      Storage: Memory  Maximum Storage: 17kB
+        ->  Hash  (cost=12.22..12.22 rows=10 width=21) (actual time=0.028..0.028 rows=10.00 loops=1)
+              Buckets: 1024  Batches: 1  Memory Usage: 9kB
+              Buffers: shared hit=38
+              ->  Nested Loop  (cost=4.62..12.22 rows=10 width=21) (actual time=0.017..0.026 rows=10.00 loops=1)
+                    Buffers: shared hit=38
+                    ->  Nested Loop  (cost=4.35..8.60 rows=10 width=8) (actual time=0.014..0.018 rows=10.00 loops=1)
+                          Buffers: shared hit=8
+                          ->  CTE Scan on allowed_group  (cost=0.00..0.02 rows=1 width=8) (actual time=0.009..0.009 rows=1.00 loops=1)
+                                Storage: Memory  Maximum Storage: 17kB
+                                Buffers: shared hit=3
+                          ->  Bitmap Heap Scan on group_members m  (cost=4.35..8.48 rows=10 width=16) (actual time=0.005..0.008 rows=10.00 loops=1)
+                                Recheck Cond: (group_id = allowed_group.group_id)
+                                Heap Blocks: exact=3
+                                Buffers: shared hit=5
+                                ->  Bitmap Index Scan on group_members_pkey  (cost=0.00..4.35 rows=10 width=0) (actual time=0.002..0.002 rows=10.00 loops=1)
+                                      Index Cond: (group_id = allowed_group.group_id)
+                                      Index Searches: 1
+                                      Buffers: shared hit=2
+                    ->  Index Scan using users_pkey on users u  (cost=0.27..0.36 rows=1 width=21) (actual time=0.001..0.001 rows=1.00 loops=10)
+                          Index Cond: (user_id = m.user_id)
+                          Index Searches: 10
+                          Buffers: shared hit=30
+Planning:
+  Buffers: shared hit=247
+Planning Time: 0.639 ms
+Execution Time: 0.434 ms

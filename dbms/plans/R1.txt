@@ -1,0 +1,33 @@
+=== R1 run 1 ===
+Sort  (cost=32.41..33.66 rows=500 width=21) (actual time=0.120..0.129 rows=500.00 loops=1)
+  Sort Key: display_name, user_id
+  Sort Method: quicksort  Memory: 44kB
+  Buffers: shared hit=11
+  ->  Seq Scan on users  (cost=0.00..10.00 rows=500 width=21) (actual time=0.009..0.038 rows=500.00 loops=1)
+        Buffers: shared hit=5
+Planning:
+  Buffers: shared hit=91
+Planning Time: 0.304 ms
+Execution Time: 0.160 ms
+=== R1 run 2 ===
+Sort  (cost=32.41..33.66 rows=500 width=21) (actual time=0.107..0.116 rows=500.00 loops=1)
+  Sort Key: display_name, user_id
+  Sort Method: quicksort  Memory: 44kB
+  Buffers: shared hit=11
+  ->  Seq Scan on users  (cost=0.00..10.00 rows=500 width=21) (actual time=0.004..0.028 rows=500.00 loops=1)
+        Buffers: shared hit=5
+Planning:
+  Buffers: shared hit=91
+Planning Time: 0.176 ms
+Execution Time: 0.141 ms
+=== R1 run 3 ===
+Sort  (cost=32.41..33.66 rows=500 width=21) (actual time=0.115..0.124 rows=500.00 loops=1)
+  Sort Key: display_name, user_id
+  Sort Method: quicksort  Memory: 44kB
+  Buffers: shared hit=11
+  ->  Seq Scan on users  (cost=0.00..10.00 rows=500 width=21) (actual time=0.005..0.032 rows=500.00 loops=1)
+        Buffers: shared hit=5
+Planning:
+  Buffers: shared hit=91
+Planning Time: 0.286 ms
+Execution Time: 0.151 ms

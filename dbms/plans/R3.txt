@@ -1,0 +1,96 @@
+=== R3 run 1 ===
+Sort  (cost=28.48..28.51 rows=10 width=21) (actual time=0.073..0.074 rows=10.00 loops=1)
+  Sort Key: u.display_name, u.user_id
+  Sort Method: quicksort  Memory: 25kB
+  Buffers: shared hit=19
+  ->  Nested Loop  (cost=8.87..28.32 rows=10 width=21) (actual time=0.033..0.061 rows=10.00 loops=1)
+        Buffers: shared hit=13
+        ->  Index Only Scan using group_members_pkey on group_members viewer  (cost=0.27..8.29 rows=1 width=8) (actual time=0.009..0.010 rows=1.00 loops=1)
+              Index Cond: ((group_id = '10'::bigint) AND (user_id = '91'::bigint))
+              Heap Fetches: 1
+              Index Searches: 1
+              Buffers: shared hit=3
+        ->  Hash Join  (cost=8.60..19.92 rows=10 width=29) (actual time=0.023..0.050 rows=10.00 loops=1)
+              Hash Cond: (u.user_id = member.user_id)
+              Buffers: shared hit=10
+              ->  Seq Scan on users u  (cost=0.00..10.00 rows=500 width=21) (actual time=0.003..0.019 rows=500.00 loops=1)
+                    Buffers: shared hit=5
+              ->  Hash  (cost=8.48..8.48 rows=10 width=16) (actual time=0.011..0.011 rows=10.00 loops=1)
+                    Buckets: 1024  Batches: 1  Memory Usage: 9kB
+                    Buffers: shared hit=5
+                    ->  Bitmap Heap Scan on group_members member  (cost=4.35..8.48 rows=10 width=16) (actual time=0.005..0.008 rows=10.00 loops=1)
+                          Recheck Cond: (group_id = '10'::bigint)
+                          Heap Blocks: exact=3
+                          Buffers: shared hit=5
+                          ->  Bitmap Index Scan on group_members_pkey  (cost=0.00..4.35 rows=10 width=0) (actual time=0.002..0.002 rows=10.00 loops=1)
+                                Index Cond: (group_id = '10'::bigint)
+                                Index Searches: 1
+                                Buffers: shared hit=2
+Planning:
+  Buffers: shared hit=137
+Planning Time: 0.316 ms
+Execution Time: 0.092 ms
+=== R3 run 2 ===
+Sort  (cost=28.48..28.51 rows=10 width=21) (actual time=0.070..0.070 rows=10.00 loops=1)
+  Sort Key: u.display_name, u.user_id
+  Sort Method: quicksort  Memory: 25kB
+  Buffers: shared hit=19
+  ->  Nested Loop  (cost=8.87..28.32 rows=10 width=21) (actual time=0.029..0.057 rows=10.00 loops=1)
+        Buffers: shared hit=13
+        ->  Index Only Scan using group_members_pkey on group_members viewer  (cost=0.27..8.29 rows=1 width=8) (actual time=0.007..0.007 rows=1.00 loops=1)
+              Index Cond: ((group_id = '10'::bigint) AND (user_id = '91'::bigint))
+              Heap Fetches: 1
+              Index Searches: 1
+              Buffers: shared hit=3
+        ->  Hash Join  (cost=8.60..19.92 rows=10 width=29) (actual time=0.022..0.049 rows=10.00 loops=1)
+              Hash Cond: (u.user_id = member.user_id)
+              Buffers: shared hit=10
+              ->  Seq Scan on users u  (cost=0.00..10.00 rows=500 width=21) (actual time=0.003..0.020 rows=500.00 loops=1)
+                    Buffers: shared hit=5
+              ->  Hash  (cost=8.48..8.48 rows=10 width=16) (actual time=0.010..0.010 rows=10.00 loops=1)
+                    Buckets: 1024  Batches: 1  Memory Usage: 9kB
+                    Buffers: shared hit=5
+                    ->  Bitmap Heap Scan on group_members member  (cost=4.35..8.48 rows=10 width=16) (actual time=0.005..0.008 rows=10.00 loops=1)
+                          Recheck Cond: (group_id = '10'::bigint)
+                          Heap Blocks: exact=3
+                          Buffers: shared hit=5
+                          ->  Bitmap Index Scan on group_members_pkey  (cost=0.00..4.35 rows=10 width=0) (actual time=0.002..0.002 rows=10.00 loops=1)
+                                Index Cond: (group_id = '10'::bigint)
+                                Index Searches: 1
+                                Buffers: shared hit=2
+Planning:
+  Buffers: shared hit=137
+Planning Time: 0.312 ms
+Execution Time: 0.089 ms
+=== R3 run 3 ===
+Sort  (cost=28.48..28.51 rows=10 width=21) (actual time=0.070..0.070 rows=10.00 loops=1)
+  Sort Key: u.display_name, u.user_id
+  Sort Method: quicksort  Memory: 25kB
+  Buffers: shared hit=19
+  ->  Nested Loop  (cost=8.87..28.32 rows=10 width=21) (actual time=0.031..0.057 rows=10.00 loops=1)
+        Buffers: shared hit=13
+        ->  Index Only Scan using group_members_pkey on group_members viewer  (cost=0.27..8.29 rows=1 width=8) (actual time=0.007..0.007 rows=1.00 loops=1)
+              Index Cond: ((group_id = '10'::bigint) AND (user_id = '91'::bigint))
+              Heap Fetches: 1
+              Index Searches: 1
+              Buffers: shared hit=3
+        ->  Hash Join  (cost=8.60..19.92 rows=10 width=29) (actual time=0.023..0.048 rows=10.00 loops=1)
+              Hash Cond: (u.user_id = member.user_id)
+              Buffers: shared hit=10
+              ->  Seq Scan on users u  (cost=0.00..10.00 rows=500 width=21) (actual time=0.003..0.022 rows=500.00 loops=1)
+                    Buffers: shared hit=5
+              ->  Hash  (cost=8.48..8.48 rows=10 width=16) (actual time=0.011..0.011 rows=10.00 loops=1)
+                    Buckets: 1024  Batches: 1  Memory Usage: 9kB
+                    Buffers: shared hit=5
+                    ->  Bitmap Heap Scan on group_members member  (cost=4.35..8.48 rows=10 width=16) (actual time=0.005..0.008 rows=10.00 loops=1)
+                          Recheck Cond: (group_id = '10'::bigint)
+                          Heap Blocks: exact=3
+                          Buffers: shared hit=5
+                          ->  Bitmap Index Scan on group_members_pkey  (cost=0.00..4.35 rows=10 width=0) (actual time=0.002..0.002 rows=10.00 loops=1)
+                                Index Cond: (group_id = '10'::bigint)
+                                Index Searches: 1
+                                Buffers: shared hit=2
+Planning:
+  Buffers: shared hit=137
+Planning Time: 0.314 ms
+Execution Time: 0.090 ms

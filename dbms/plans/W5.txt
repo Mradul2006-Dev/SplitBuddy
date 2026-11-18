@@ -1,0 +1,66 @@
+=== W5 run 1 ===
+Insert on settlements  (cost=0.55..16.60 rows=1 width=48) (actual time=0.089..0.089 rows=1.00 loops=1)
+  Buffers: shared hit=34
+  ->  Nested Loop  (cost=0.55..16.60 rows=1 width=48) (actual time=0.033..0.033 rows=1.00 loops=1)
+        Join Filter: (sender.user_id <> receiver.user_id)
+        Buffers: shared hit=18
+        ->  Index Only Scan using group_members_pkey on group_members sender  (cost=0.27..8.29 rows=1 width=16) (actual time=0.009..0.009 rows=1.00 loops=1)
+              Index Cond: ((group_id = '10'::bigint) AND (user_id = '91'::bigint))
+              Heap Fetches: 1
+              Index Searches: 1
+              Buffers: shared hit=3
+        ->  Index Only Scan using group_members_pkey on group_members receiver  (cost=0.27..8.29 rows=1 width=16) (actual time=0.002..0.002 rows=1.00 loops=1)
+              Index Cond: ((group_id = '10'::bigint) AND (user_id = '92'::bigint))
+              Heap Fetches: 1
+              Index Searches: 1
+              Buffers: shared hit=3
+Planning:
+  Buffers: shared hit=77
+Planning Time: 0.203 ms
+Trigger for constraint settlements_group_id_from_user_id_fkey: time=0.059 calls=1
+Trigger for constraint settlements_group_id_to_user_id_fkey: time=0.018 calls=1
+Execution Time: 0.182 ms
+=== W5 run 2 ===
+Insert on settlements  (cost=0.55..16.60 rows=1 width=48) (actual time=0.074..0.075 rows=1.00 loops=1)
+  Buffers: shared hit=34
+  ->  Nested Loop  (cost=0.55..16.60 rows=1 width=48) (actual time=0.026..0.026 rows=1.00 loops=1)
+        Join Filter: (sender.user_id <> receiver.user_id)
+        Buffers: shared hit=18
+        ->  Index Only Scan using group_members_pkey on group_members sender  (cost=0.27..8.29 rows=1 width=16) (actual time=0.009..0.009 rows=1.00 loops=1)
+              Index Cond: ((group_id = '10'::bigint) AND (user_id = '91'::bigint))
+              Heap Fetches: 1
+              Index Searches: 1
+              Buffers: shared hit=3
+        ->  Index Only Scan using group_members_pkey on group_members receiver  (cost=0.27..8.29 rows=1 width=16) (actual time=0.002..0.002 rows=1.00 loops=1)
+              Index Cond: ((group_id = '10'::bigint) AND (user_id = '92'::bigint))
+              Heap Fetches: 1
+              Index Searches: 1
+              Buffers: shared hit=3
+Planning:
+  Buffers: shared hit=77
+Planning Time: 0.191 ms
+Trigger for constraint settlements_group_id_from_user_id_fkey: time=0.061 calls=1
+Trigger for constraint settlements_group_id_to_user_id_fkey: time=0.019 calls=1
+Execution Time: 0.173 ms
+=== W5 run 3 ===
+Insert on settlements  (cost=0.55..16.60 rows=1 width=48) (actual time=0.073..0.074 rows=1.00 loops=1)
+  Buffers: shared hit=34
+  ->  Nested Loop  (cost=0.55..16.60 rows=1 width=48) (actual time=0.026..0.026 rows=1.00 loops=1)
+        Join Filter: (sender.user_id <> receiver.user_id)
+        Buffers: shared hit=18
+        ->  Index Only Scan using group_members_pkey on group_members sender  (cost=0.27..8.29 rows=1 width=16) (actual time=0.009..0.009 rows=1.00 loops=1)
+              Index Cond: ((group_id = '10'::bigint) AND (user_id = '91'::bigint))
+              Heap Fetches: 1
+              Index Searches: 1
+              Buffers: shared hit=3
+        ->  Index Only Scan using group_members_pkey on group_members receiver  (cost=0.27..8.29 rows=1 width=16) (actual time=0.002..0.002 rows=1.00 loops=1)
+              Index Cond: ((group_id = '10'::bigint) AND (user_id = '92'::bigint))
+              Heap Fetches: 1
+              Index Searches: 1
+              Buffers: shared hit=3
+Planning:
+  Buffers: shared hit=77
+Planning Time: 0.188 ms
+Trigger for constraint settlements_group_id_from_user_id_fkey: time=0.059 calls=1
+Trigger for constraint settlements_group_id_to_user_id_fkey: time=0.017 calls=1
+Execution Time: 0.166 ms

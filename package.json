@@ -1,0 +1,16 @@
+{
+  "name": "splitbuddy",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Local PostgreSQL expense-sharing application for T0120",
+  "scripts": {
+    "start": "node server.mjs"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "dependencies": {
+    "pg": "8.23.1"
+  }
+}

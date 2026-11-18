@@ -26,6 +26,9 @@ SELECT e.group_id, e.expense_no, e.paid_by + offsets.member_offset, 10000
 FROM expenses AS e
 CROSS JOIN generate_series(0, 3) AS offsets(member_offset);
 
+INSERT INTO settlements (group_id, from_user_id, to_user_id, amount_paise)
+SELECT group_id, created_by + 1, created_by, 1000 FROM expense_groups;
+
 SELECT setval(pg_get_serial_sequence('users', 'user_id'), max(user_id)) FROM users;
 SELECT setval(pg_get_serial_sequence('expense_groups', 'group_id'), max(group_id)) FROM expense_groups;
 SELECT setval(pg_get_serial_sequence('expenses', 'expense_no'), max(expense_no)) FROM expenses;
